@@ -7,7 +7,7 @@ if ( ! class_exists( 'ddWooMD_core' ) ) {
 
         public function __construct()
         {
-			// add_action( 'init', [$this, 'mailchimp_integration'] );
+			// add_action( 'init', [$this, 'teststart'] );
         }
 
         /**
@@ -102,42 +102,33 @@ if ( ! class_exists( 'ddWooMD_core' ) ) {
 		public function mailchimp_integration($email) 
 		{
 
-			$list_id = get_field('audienece_name', 'option');
 			$api_key = get_field('mailchimp_api_key', 'option');
+			$list_id = get_field('audienece_name', 'option');
 
 			$data_center = substr($api_key,strpos($api_key,'-') + 1);
- 
-			$url = 'https://'. $data_center .'.api.mailchimp.com/3.0/lists/'. $list_id .'/members';
-			
+ 			
 			$json = json_encode([
 				'email_address' => $email,
 				'status'        => 'subscribed', 
 			]);
-			
-			try {
-				$ch = curl_init($url);
-				curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $api_key);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-				$result = curl_exec($ch);
-				$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				curl_close($ch);
-			
-				if (200 == $status_code) {
-					// echo "The user added successfully to the MailChimp.";
-					echo  get_field('success_send_text', 'option'); 
-					$coupon_code = $this->dd_create_coupon_code_programmatically();
-					$mail_result_array = $this->send_mail_with_coupon_code($email, $coupon_code);
-					// var_dump($mail_result_array);
-				}
-			} catch(Exception $e) {
-				echo get_field('invalid_email_error_text', 'option');
-				echo $e->getMessage();
+
+			$client = new \MailchimpMarketing\ApiClient();     
+            $client->setConfig([
+                'apiKey' => $api_key,
+                'server' => $data_center
+            ]);
+
+			$response = $client->lists->addListMember($list_id, [
+				"email_address" => $email,
+				"status" => "subscribed",
+			]);
+
+			if ( $response->status == "subscribed" ) {
+				echo get_field('success_send_text', 'option'); 
+				$coupon_code = $this->dd_create_coupon_code_programmatically();
+				$mail_result_array = $this->send_mail_with_coupon_code($email, $coupon_code);
 			}
+
 		}
 
     }

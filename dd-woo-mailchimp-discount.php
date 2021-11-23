@@ -26,6 +26,12 @@ if ( ! class_exists( 'ACF' ) ) {
     require_once DDWOOMD_PATH . 'vendor/acf/acf.php';
 }
 
+// Include the ACF plugin.
+// if ( ! class_exists( 'ACF' ) ) {
+    require_once DDWOOMD_PATH . 'vendor/autoload.php';
+// }
+
+
 
 // (Optional) Hide the ACF admin menu item.
 add_filter('acf/settings/show_admin', 'my_acf_settings_show_admin');

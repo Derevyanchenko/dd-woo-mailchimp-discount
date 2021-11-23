@@ -331,35 +331,23 @@ if ( ! class_exists( 'ddWooMD_Settings_Page' ) ) {
 
             $api_key = get_field('mailchimp_api_key', 'option');
             $data_center = substr($api_key,strpos($api_key,'-') + 1);
-			$url = 'https://'. $data_center .'.api.mailchimp.com/3.0/lists/';
 
-            try {
-				$ch = curl_init($url);
-				curl_setopt($ch, CURLOPT_USERPWD, 'user:' . $api_key);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				$result = curl_exec($ch);
-				$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				curl_close($ch);
-			
-                $result = json_decode($result, true);
+            $client = new \MailchimpMarketing\ApiClient();
+            
+            $client->setConfig([
+                'apiKey' => $api_key,
+                'server' => $data_center
+            ]);
 
-				if (200 == $status_code) {
-                    foreach ( $result['lists'] as $item ) {
-                        $field['choices'][$item['id']] = $item['name'];
-                        // echo 'Audience Id: ' . $item['id'] . '<br>';
-                        // echo 'Audience Name: ' . $item['name'] . '<br>';
-                        // echo '<hr>';
-                    }
-				}
+            $allLists = $client->lists->getAllLists();
+            
+            if ( ! (empty( $allLists )) || count($allLists) > 0 ) {
+                foreach ( $allLists->lists as $item ) {
+                    $field['choices'][$item->id] = $item->name;
+                }
+            }
 
-                return $field;
-
-			} catch(Exception $e) {	
-                echo $e->getMessage();
-                return $field;
-			}
-			
-
+            return $field;
         }
 
     }
