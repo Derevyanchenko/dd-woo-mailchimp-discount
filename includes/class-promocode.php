@@ -14,23 +14,23 @@ if ( ! class_exists( 'Promocode' ) ) {
      */ 
     class Promocode
     {
-        /**
-        * Generate random name for coupon code.
-        *
-        * @return string $name Generated promocode name.
-        */
+		/**
+		* Generate random name for coupon code.
+		*
+		* @return string $name Generated promocode name.
+		*/
 		private function generate_coupon_name()
 		{
 			return substr( str_shuffle( "ABCDEFGHJKMNPQRSTUVWXYZ23456789" ),  0, 8 );
 		}
 
-        /**
-        * Method check if coupon code exists in database.
+		/**
+		* Method check if coupon code exists in database.
 		*
 		* @param string $code Coupon code name.
-        *
-        * @return boolean true if coupon already exists in database and false if not.
-        */
+		*
+		* @return boolean true if coupon already exists in database and false if not.
+		*/
 		private function is_coupon_exists( $code ) 
 		{
 			global $wpdb;
@@ -88,7 +88,7 @@ if ( ! class_exists( 'Promocode' ) ) {
 			update_post_meta( $new_coupon_id, 'free_shipping', 'no' );
 
 			return $coupon_code;
-		}
+			}
     }
 
 }
