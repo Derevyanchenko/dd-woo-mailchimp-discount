@@ -1,29 +1,26 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function($ ) {
 
-    $('.ddwoomd_form').on("submit", function(e) {
+    $('.ddwmd_form').on("submit", function(e) {
         e.preventDefault();
-
         send_data_to_mailchimp( $(this) );
     });
 
     /**
-     * rewfsd
+     * Ajax method that sends data to mailchimp and, if successful, displays a success message.
      */
-    function send_data_to_mailchimp(el) {
+    function send_data_to_mailchimp( el ) {
         $.ajax({
-            url: ddWooMD_ajax.ajaxurl,
+            url: DDWMD_ajax.ajaxurl,
             type: el.attr('method'),
             data: {
-                // action: el.attr('action'),
-                action: 'send_data_to_mailchimp',
-                nonce: ddWooMD_ajax.nonce,
-                email: el.find("#ddwoomd_email").val(),
+                action: 'ddwmd_integrate',
+                nonce: DDWMD_ajax.nonce,
+                email: el.find("#ddwmd_email").val(),
             },
             success: function(data) {
-                console.log( 'success send' );
-                console.log(data);
+                const successMessage = data.data.message;
                 el.trigger('reset');
-                alert(data);
+                alert(successMessage);
 
             },
             error: function(error) {

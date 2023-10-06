@@ -5,97 +5,74 @@ Plugin URI: #
 Description:  DD WooCommerce Mailchimp Discount
 Version: 1.0
 Author: Danil Derevyanchenko
-Author URI: https://derevyanchenko.github.io/portfolio/
+Author URI: https://danilderevyanchenko.com.ua/portfolio/
 Licence: GPLv2 or later
-Text Domain: ddWooMD
-Domain Path: /lang
+Text Domain: DDWMD
 */ 
 
-if( ! defined('ABSPATH') ) {
-    die;
-}  
+/*
+DDWMD is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+any later version.
 
-define('DDWOOMD_PATH', plugin_dir_path(__FILE__));
+DDWMD is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-// Define path and URL to the ACF plugin.
-define( 'MY_ACF_PATH', DDWOOMD_PATH . '/vendor/acf/' );
-define( 'MY_ACF_URL', DDWOOMD_PATH . '/vendor/acf/' );
+You should have received a copy of the GNU General Public License
+along with DDWMD. If not, see {URI to Plugin License}.
+*/
 
-// Include the ACF plugin.
+
+// If this file is called firectly, abort!!!
+defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
+
+if ( ! defined( 'DDWMD_PATH') ) {
+	/**
+	 * Dir Path.
+	 * */ 
+	define( 'DDWMD_PATH', plugin_dir_path( __FILE__ ) );
+}
+
+if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
+	/**
+	 * Require once the Composer Autoload.
+	 */
+	require_once dirname( __FILE__ ) . '/vendor/autoload.php';
+}
+
+if ( file_exists( dirname( __FILE__ ) . '/includes/helpers/autoload.php' ) ) {
+	/**
+	 * Require custom autholoading for php classes.
+	 */
+	require_once dirname( __FILE__ ) . '/includes/helpers/autoload.php';
+}
+
 if ( ! class_exists( 'ACF' ) ) {
-    require_once DDWOOMD_PATH . 'vendor/acf/acf.php';
+	/**
+	 * Define path and URL to the ACF plugin.
+	 * 
+	 * Include the ACF plugin.
+	 * */ 
+	define( 'MY_ACF_PATH', DDWMD_PATH . '/vendor/acf/' );
+	define( 'MY_ACF_URL', DDWMD_PATH . '/vendor/acf/' );
+
+    require_once DDWMD_PATH . 'vendor/acf/acf.php';
 }
 
-// Include the ACF plugin.
-// if ( ! class_exists( 'ACF' ) ) {
-    require_once DDWOOMD_PATH . 'vendor/autoload.php';
-// }
-
-
-
-// (Optional) Hide the ACF admin menu item.
-add_filter('acf/settings/show_admin', 'my_acf_settings_show_admin');
-function my_acf_settings_show_admin( $show_admin ) {
-    return false;
+if ( file_exists( dirname( __FILE__ ) . '/includes/helpers/custom-functions.php' ) ) {
+	/**
+	 * Require once the array of acf fields for Settings Page.
+	 */
+	require_once dirname( __FILE__ ) . '/includes/helpers/custom-functions.php';
 }
 
-require_once DDWOOMD_PATH . 'includes/ddWooMD-settings-page.php';
-require_once DDWOOMD_PATH . 'includes/class-ddWooMD-core.php';
-require_once DDWOOMD_PATH . 'includes/class-ddWooMD-shortcodes.php';
-require_once DDWOOMD_PATH . 'includes/class-ddWooMD-ajax.php';
 
-/******************************************
- * WooCommerce discount Mailchimp
- *****************************************/
-
-	
-	class ddWooMD
-	{
-
-		public function __construct() 
-		{
-			add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
-		}
-
-
-		/**
-		 * enqueue frontend scripts method
-		 */
-		public function enqueue_styles()
-		{
-			wp_register_script('ddwoomd_main_script', plugins_url( '/assets/js/main.js', __FILE__ ), array('jquery'), time() );
-
-			wp_localize_script('ddwoomd_main_script', 'ddWooMD_ajax', array(
-				'ajaxurl' => admin_url('admin-ajax.php'),
-				'nonce' => wp_create_nonce('_wpnonce'),
-				'title' => esc_html__('ddWooMD test title', 'ddWooMD'),
-			));
-
-			wp_enqueue_script( 'ddwoomd_main_script' );
-		}
-
-		/**
-		 * activation hook
-		 */
-		static function activation() 
-		{
-			flush_rewrite_rules();
-		}
-
-		/**
-		 * deactivation hook
-		 */
-		static function deactivation()
-		{
-			flush_rewrite_rules();
-		}
-
-	}
-
-
-// if ( ! class_exists( 'ddWooMD' ) ) {
-	$ddWooMD = new ddWooMD();
-// }
-
-register_activation_hook( __FILE__, array( $ddWooMD, 'activation' ) );
-register_deactivation_hook( __FILE__, array( $ddWooMD, 'deactivation' ) );
+if ( class_exists( DDWMD\Inc\Plugin::class ) ) {
+	/**
+	 * Initialize all the core classes of the plugin
+	*/
+	DDWMD\Inc\Plugin::get_instance();
+}
