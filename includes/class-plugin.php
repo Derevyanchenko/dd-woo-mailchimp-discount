@@ -21,15 +21,15 @@ class Plugin
 	 * Construct method.
 	 * Contains init_services method. 
 	 */
-    protected function __construct()
-    {
-        self::init_services();
-    }
+	protected function __construct()
+	{
+		self::init_services();
+	}
 
 	/**
 	 * Method registers all used classes with their namespaces.
 	 */
-    private static function get_services()
+	private static function get_services()
 	{
 		return [
 			Assets::class,
