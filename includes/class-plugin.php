@@ -8,7 +8,6 @@ namespace DDWMD\Inc;
 
 use DDWMD\Inc\Traits\Singleton;
 
-
 /**
  * Plugin class.
  * 
@@ -48,7 +47,7 @@ class Plugin
 	 * has a 'get_instance' method (Singleton pattern), calls it, 
 	 * thereby initializing the object of the current class.
 	 */
-    private static function init_services()
+	private static function init_services()
 	{
 		foreach (self::get_services() as $class) {
 			if ( method_exists( $class, 'get_instance' ) ) {

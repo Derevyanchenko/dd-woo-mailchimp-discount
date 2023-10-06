@@ -7,7 +7,6 @@
 
 namespace DDWMD\Inc;
 
-
 if ( ! class_exists( 'Promocode' ) ) {
     /**
      * Promocode class.
@@ -20,10 +19,10 @@ if ( ! class_exists( 'Promocode' ) ) {
         *
         * @return string $name Generated promocode name.
         */
-        private function generate_coupon_name()
-        {
+		private function generate_coupon_name()
+		{
 			return substr( str_shuffle( "ABCDEFGHJKMNPQRSTUVWXYZ23456789" ),  0, 8 );
-        }
+		}
 
         /**
         * Method check if coupon code exists in database.
@@ -37,25 +36,25 @@ if ( ! class_exists( 'Promocode' ) ) {
 			global $wpdb;
 
 			$sql = $wpdb->prepare( 
-                "SELECT post_name 
-                FROM $wpdb->posts 
-                WHERE post_type = 'shop_coupon' 
-                AND post_name = '%s'", 
-                $code 
-            );
+				"SELECT post_name 
+				FROM $wpdb->posts 
+				WHERE post_type = 'shop_coupon' 
+				AND post_name = '%s'", 
+				$code 
+			);
 
 			$results = $wpdb->get_results( $sql );
 
 			if ( count( $results ) > 0) return true;
-            
-            return false;
+
+			return false;
 		}
 
 
-        /**
+		/**
 		 * Create a coupon programatically.
-         * 
-         * @return string $coupon_code.
+		 * 
+		 * @return string $coupon_code.
 		 */
 		public function create_coupon_code() 
 		{
@@ -65,7 +64,7 @@ if ( ! class_exists( 'Promocode' ) ) {
 				$coupon_code = $this->generate_coupon_name();
 			} 
 
-            $amount = get_field('coupon_amount', 'option'); 
+			$amount = get_field('coupon_amount', 'option'); 
 			$discount_type = get_field('discount_type', 'option'); 
 
 			$coupon = array(
@@ -90,7 +89,6 @@ if ( ! class_exists( 'Promocode' ) ) {
 
 			return $coupon_code;
 		}
-
     }
 
 }

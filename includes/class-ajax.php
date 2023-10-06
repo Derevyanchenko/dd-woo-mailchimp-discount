@@ -44,7 +44,8 @@ if ( ! class_exists( 'AJAX' ) ) {
          * Contains instance of needed packages and register ajax callback.
          * 
          */ 
-		protected function __construct() {
+        protected function __construct() 
+        {
             $this->promocode_manager = new Promocode();
             $this->mailer            = new Mailer();
             $this->mailchimp_api     = new Mailchimp_API();
@@ -61,8 +62,8 @@ if ( ! class_exists( 'AJAX' ) ) {
          * 
          * @return string $response Success or error with status and message.
          */
-		public function ddwmd_integrate( $email ) 
-		{
+        public function ddwmd_integrate( $email ) 
+        {
             if ( ! empty( $_POST ) ) {
 
                 check_ajax_referer( '_wpnonce', 'nonce' );
@@ -86,7 +87,7 @@ if ( ! class_exists( 'AJAX' ) ) {
             return wp_send_json_error( array(
                 'message' => __( 'Something went wrong.' ),
             ) );
-		}
+        }
     }
 
 }

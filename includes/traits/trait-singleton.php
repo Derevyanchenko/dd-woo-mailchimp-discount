@@ -27,11 +27,12 @@
 
 namespace DDWMD\Inc\Traits;
 
-trait Singleton {
-    
+trait Singleton 
+{    
     private static $instance;
 
-    public static function get_instance() {
+    public static function get_instance() 
+    {
         if ( ! isset( self::$instance ) ) {
             self::$instance = new self();
         }

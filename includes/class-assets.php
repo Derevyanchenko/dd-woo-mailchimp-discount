@@ -9,7 +9,6 @@ namespace DDWMD\Inc;
 
 use DDWMD\Inc\Traits\Singleton;
 
-
 if ( ! class_exists( 'Assets' ) ) {
     /**
      * Assets class.

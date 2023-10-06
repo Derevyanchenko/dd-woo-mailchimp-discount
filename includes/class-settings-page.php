@@ -9,7 +9,6 @@ namespace DDWMD\Inc;
 
 use DDWMD\Inc\Traits\Singleton;
 
-
 if ( ! class_exists( 'Settings_Page' ) ) {
     /**
      * Settings page class.

@@ -45,7 +45,8 @@ if ( ! class_exists( 'Mailchimp_API' ) ) {
          *
          * @return array
          */
-        public function get_all_lists() {
+        public function get_all_lists() 
+        {
             return $this->client->lists->getAllLists();
         }
 
@@ -57,17 +58,17 @@ if ( ! class_exists( 'Mailchimp_API' ) ) {
          * 
          * @return string $email_response Success or error.
          */
-		public function add_list_member( $email ) 
-		{
-			$list_id = get_field('audienece_name', 'option');
+        public function add_list_member( $email ) 
+        {
+            $list_id = get_field('audienece_name', 'option');
 
-			$response = $this->client->lists->addListMember( $list_id, [
-				"email_address" => $email,
-				"status" => "subscribed",
-			] );
+            $response = $this->client->lists->addListMember( $list_id, [
+                "email_address" => $email,
+                "status" => "subscribed",
+            ] );
 
             return $response;
-		}
+        }
     }
 
 }
